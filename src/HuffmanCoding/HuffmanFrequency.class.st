@@ -14,3 +14,8 @@ HuffmanFrequency >> children [
 HuffmanFrequency >> frequency [
 	^ self subclassResponsibility
 ]
+
+{ #category : 'as yet unclassified' }
+HuffmanFrequency >> isCharacterFrequency [
+	^ false
+]

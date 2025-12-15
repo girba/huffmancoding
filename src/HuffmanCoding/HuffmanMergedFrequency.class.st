@@ -19,6 +19,11 @@ HuffmanMergedFrequency >> frequency [
 	^ left frequency + right frequency
 ]
 
+{ #category : 'as yet unclassified' }
+HuffmanMergedFrequency >> gtDisplayOn: stream [
+	stream nextPutAll: (self frequency round: 2) asString
+]
+
 { #category : 'accessing' }
 HuffmanMergedFrequency >> left: anObject [ 
 	left := anObject
