@@ -42,6 +42,15 @@ HuffmanCoding >> gtCodingTreeFor: aView [
 			self paintCodingTreeWith: m ]
 ]
 
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> linearizedFrequencies [
+	| linearized |
+	self assert: frequencies size = 1 description: 'Linearization only makes sense for coded trees. Try using `run` before.'.
+	linearized := OrderedCollection new.
+	self rootFrequency traverseDo: [ :frequency | frequency isCharacterFrequency ifTrue: [ linearized add: frequency ] ].
+	^ linearized
+]
+
 { #category : 'accessing' }
 HuffmanCoding >> paintCodingTreeWith: m [
 	m nodes
@@ -50,8 +59,11 @@ HuffmanCoding >> paintCodingTreeWith: m [
 			container := BrVerticalPane new fitContent alignCenter.
 			container
 				addChild: (BrLabel new
+						geometry: (BlRoundedRectangleGeometry cornerRadius: 5 );
+						border: Color veryVeryLightGray;
+						padding: (BlInsets all: 2);
 						aptitude: (BrGlamorousLabelAptitude new
-								foreground: Color lightGray;
+								foreground: Color black;
 								glamorousRegularSmallSize);
 						text: (each frequency round: 2)).
 			each isCharacterFrequency
@@ -64,12 +76,30 @@ HuffmanCoding >> paintCodingTreeWith: m [
 	m edges
 		fromCenterBottom;
 		toCenterTop;
-		stencil: [ BlManhattanLineElement new
+		stencil: [ :parent :fromElement :toElement | 
+			BlManhattanLineElement new
 				zIndex: 0;
-				beVertical;
-				border: (BlBorder paint: (Color gray alpha: 0.2) width: 1) ];
+				border: (BlBorder paint: Color veryVeryLightGray width: 1);
+				layout: BlFrameLayout new;
+				clipChildren: false;
+				addChild: (BrLabel new
+						constraintsDo: [ :c | 
+							c frame horizontal alignCenter.
+							c frame vertical alignCenter ];
+						aptitude: (BrGlamorousLabelAptitude new
+								fontSize: 7;
+								foreground: Color veryLightGray;
+								highlight: Color white);
+						text: (parent left = toElement graph model ifTrue: [ '0' ] ifFalse: [ '1' ]));
+				beVertical ];
 		connectToAll: #children.
 	m layout tree nodeDistance: 10
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> rootFrequency [
+	self assert: frequencies size = 1 description: 'The root only makes sense for coded trees in which frequencies have a single . Try using `run` before.'.
+	^ self frequencies anyOne
 ]
 
 { #category : 'accessing' }

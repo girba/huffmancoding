@@ -41,6 +41,15 @@ HuffmanCodingExamples >> englishCharacterFrequencies [
 ]
 
 { #category : 'accessing' }
+HuffmanCodingExamples >> linearizeFrequencies [
+	<gtExample>
+	| coding |
+	coding := self produceFrequencies.
+	self assert: coding linearizedFrequencies size = 7.
+	^ coding linearizedFrequencies
+]
+
+{ #category : 'accessing' }
 HuffmanCodingExamples >> produceFrequencies [
 	<gtExample>
 	| coding |

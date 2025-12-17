@@ -36,11 +36,28 @@ HuffmanMergedFrequency >> gtDisplayOn: stream [
 ]
 
 { #category : 'accessing' }
+HuffmanMergedFrequency >> left [
+	^ left
+]
+
+{ #category : 'accessing' }
 HuffmanMergedFrequency >> left: anObject [ 
 	left := anObject
 ]
 
 { #category : 'accessing' }
+HuffmanMergedFrequency >> right [
+	^ right
+]
+
+{ #category : 'accessing' }
 HuffmanMergedFrequency >> right: anObject [ 
 	right := anObject
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanMergedFrequency >> traverseDo: aBlock [ 
+	left traverseDo: aBlock.
+	aBlock value: self.
+	right traverseDo: aBlock
 ]

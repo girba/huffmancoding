@@ -83,3 +83,8 @@ HuffmanCharacterFrequency >> gtDisplayOn: aStream [
 HuffmanCharacterFrequency >> isCharacterFrequency [
 	^ true
 ]
+
+{ #category : 'as yet unclassified' }
+HuffmanCharacterFrequency >> traverseDo: aBlock [ 
+	aBlock value: self.
+]
