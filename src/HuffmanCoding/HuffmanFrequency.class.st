@@ -13,6 +13,17 @@ HuffmanFrequency >> children [
 	^ {}
 ]
 
+{ #category : 'accessing' }
+HuffmanFrequency >> code [
+	| code |
+	code := ''.
+	self
+		deep: [ :each | each parent ]
+		do: [ :p |  ]
+		relationDo: [ :child :p | code := code , (p left = child ifTrue: [ '0' ] ifFalse: [ '1' ]) ].
+	^ code reverse
+]
+
 { #category : 'as yet unclassified' }
 HuffmanFrequency >> frequency [
 	^ self subclassResponsibility
