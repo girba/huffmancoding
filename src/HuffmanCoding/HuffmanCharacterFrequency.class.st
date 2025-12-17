@@ -3,8 +3,7 @@ Class {
 	#superclass : 'HuffmanFrequency',
 	#instVars : [
 		'character',
-		'frequency',
-		'parent'
+		'frequency'
 	],
 	#category : 'HuffmanCoding',
 	#package : 'HuffmanCoding'
@@ -78,11 +77,6 @@ HuffmanCharacterFrequency >> gtDisplayOn: aStream [
 	aStream
 		space;
 		nextPutAll: self frequency asString
-]
-
-{ #category : 'as yet unclassified' }
-HuffmanCharacterFrequency >> hasParent [
-	^ parent notNil
 ]
 
 { #category : 'as yet unclassified' }

@@ -9,6 +9,17 @@ Class {
 	#package : 'HuffmanCoding'
 }
 
+{ #category : 'accessing' }
+HuffmanMergedFrequency class >> left: anObject right: annotherObject [
+	| result |
+	result := self new.
+	result left: anObject.
+	result right: annotherObject.
+	anObject parent: result.
+	annotherObject parent: result.
+	^ result
+]
+
 { #category : 'as yet unclassified' }
 HuffmanMergedFrequency >> children [
 	^ {left . right}

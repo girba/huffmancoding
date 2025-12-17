@@ -74,10 +74,12 @@ HuffmanCoding >> paintCodingTreeWith: m [
 
 { #category : 'accessing' }
 HuffmanCoding >> run [
-	[frequencies size > 1]
+	[ frequencies size > 1 ]
 		whileTrue: [ | lastTwo |
 			lastTwo := frequencies last: 2.
 			frequencies removeAll: lastTwo.
-			frequencies add: (HuffmanMergedFrequency new left: lastTwo first; right: lastTwo last).
-			 ]
+			frequencies
+				add: (HuffmanMergedFrequency
+						left: lastTwo last
+						right: lastTwo first) ]
 ]
