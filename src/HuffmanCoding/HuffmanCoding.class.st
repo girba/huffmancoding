@@ -67,10 +67,9 @@ HuffmanCoding >> gtCodingFor: aView [
 	^ aView columnedList
 		title: 'Coding';
 		priority: 20;
-		items: [ (self linearizedFrequencies collect: [ :each | each -> each code ]) ];
-		column: 'Character' text: [ :each | each key gtDisplayString ];
-		column: 'Code' text: [ :each | each value gtDisplayString ];
-		send: [ :each | each key ]
+		items: [ self linearizedFrequencies sorted: [:a :b | a code size < b code size ] ];
+		column: 'Character' text: [ :each | each character ];
+		column: 'Code' text: [ :each | each code ]
 ]
 
 { #category : 'views' }
@@ -95,25 +94,19 @@ HuffmanCoding >> gtCodingTreeWithLastMergeFor: aView [
 HuffmanCoding >> gtStepsFor: aView [
 	<gtView>
 	serializedSteps ifNil: [ ^ aView empty ].
-	^ aView list
+	^ aView columnedList
 		title: 'Steps';
 		priority: 30;
-		items: [ self steps, {self} ];
-		itemStencil: [ BlElement new
-				layout: BlLinearLayout horizontal;
-				constraintsDo: [ :c | 
-					c vertical fitContent.
-					c horizontal matchParent ];
-				addChild: BlElement new as: #graph ];
-		itemDataBinder: [ :anElement :aStep :anIndex | 
-			| m |
-			m := GtMondrian new.
-			aStep paintCodingTreeHighlightingLastMerge: true with: m.
-			anElement
-				replaceChild: (anElement childNamed: #graph)
-				with: m asElement
-				as: #graph.
-			anElement ]
+		items: [ self steps , {self} ];
+		column: 'Step'
+			text: [ :_ :index | index asString ]
+			width: 40;
+		column: 'Tree'
+			stencil: [ :aStep | 
+				| m |
+				m := GtMondrian new.
+				aStep paintCodingTreeHighlightingLastMerge: true with: m.
+				m asElement ]
 ]
 
 { #category : 'as yet unclassified' }

@@ -29,7 +29,7 @@
 					"__type" : "time",
 					"time" : {
 						"__type" : "dateAndTime",
-						"dateAndTimeString" : "2025-12-18T21:36:08.730411+01:00"
+						"dateAndTimeString" : "2025-12-18T21:36:17.260035+01:00"
 					}
 				},
 				"uid" : {
@@ -39,7 +39,7 @@
 				"paragraphStyle" : {
 					"__type" : "textStyle"
 				},
-				"string" : "The below section is a reproduction from the public material from Gymnasium Kirchenfeld: [](https://informatik.mygymer.ch/base/?page=code/5-compression/1-huffman/). While that material uses static picture"
+				"string" : "The below section is a reproduction from the public material from Gymnasium Kirchenfeld: [](https://informatik.mygymer.ch/base/?page=code/5-compression/1-huffman/). While that material uses static pictures, the section below is based on live examples."
 			},
 			{
 				"__type" : "textSnippet",
@@ -148,7 +148,7 @@
 					"uidString" : "8OmIRKqHT/OFFpBOe7AJ2Q=="
 				},
 				"exampleSelector" : "runCodingStep1",
-				"previewHeight" : 200,
+				"previewHeight" : 100,
 				"previewShowSelector" : "gtCodingTreeWithLastMergeFor:",
 				"exampleBehaviorName" : "HuffmanCodingExamples",
 				"codeExpanded" : true,

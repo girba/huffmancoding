@@ -148,7 +148,7 @@
 					"uidString" : "8OmIRKqHT/OFFpBOe7AJ2Q=="
 				},
 				"exampleSelector" : "runCodingStep1",
-				"previewHeight" : 200,
+				"previewHeight" : 100,
 				"previewShowSelector" : "gtCodingTreeWithLastMergeFor:",
 				"exampleBehaviorName" : "HuffmanCodingExamples",
 				"codeExpanded" : true,
