@@ -66,6 +66,7 @@ HuffmanCoding >> gtCodingFor: aView [
 	<gtView>
 	^ aView columnedList
 		title: 'Coding';
+		priority: 20;
 		items: [ (self linearizedFrequencies collect: [ :each | each -> each code ]) ];
 		column: 'Character' text: [ :each | each key gtDisplayString ];
 		column: 'Code' text: [ :each | each value gtDisplayString ];
@@ -82,15 +83,24 @@ HuffmanCoding >> gtCodingTreeFor: aView [
 ]
 
 { #category : 'views' }
+HuffmanCoding >> gtCodingTreeWithLastMergeFor: aView [
+	<gtView>
+	^ aView mondrian
+		title: 'Coding tree with last merge';
+		priority: 11;
+		painting: [ :m | self paintCodingTreeHighlightingLastMerge: true with: m ]
+]
+
+{ #category : 'views' }
 HuffmanCoding >> gtStepsFor: aView [
 	<gtView>
 	serializedSteps ifNil: [ ^ aView empty ].
 	^ aView list
 		title: 'Steps';
+		priority: 30;
 		items: [ self steps, {self} ];
 		itemStencil: [ BlElement new
 				layout: BlLinearLayout horizontal;
-				margin: (BlInsets all: 3);
 				constraintsDo: [ :c | 
 					c vertical fitContent.
 					c horizontal matchParent ];
@@ -120,6 +130,11 @@ HuffmanCoding >> linearizedFrequencies [
 	linearized := OrderedCollection new.
 	self rootFrequency traverseDo: [ :frequency | frequency isCharacterFrequency ifTrue: [ linearized add: frequency ] ].
 	^ linearized
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> merges [
+	^ merges
 ]
 
 { #category : 'accessing' }

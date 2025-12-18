@@ -90,6 +90,66 @@ HuffmanCodingExamples >> runCodingForEnglish [
 ]
 
 { #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep1 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 1.
+	self assert: step merges isEmpty.
+	^ step
+]
+
+{ #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep2 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 2.
+	self assert: step merges size equals: 1.
+	^ step
+]
+
+{ #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep3 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 3.
+	self assert: step merges size equals: 2.
+	^ step
+]
+
+{ #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep4 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 4.
+	self assert: step merges size equals: 3.
+	^ step
+]
+
+{ #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep5 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 5.
+	self assert: step merges size equals: 4.
+	^ step
+]
+
+{ #category : 'accessing' }
+HuffmanCodingExamples >> runCodingStep6 [
+	<gtExample>
+	| coding step |
+	coding := self runCoding.
+	step := coding steps at: 6.
+	self assert: step merges size equals: 5.
+	^ step
+]
+
+{ #category : 'accessing' }
 HuffmanCodingExamples >> runCodingStepsAreNotSerialized [
 	<gtExample>
 	| coding |
