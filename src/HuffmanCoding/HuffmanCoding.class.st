@@ -33,6 +33,17 @@ HuffmanCoding >> gtCharacterFrequenciesFor: aView [
 ]
 
 { #category : 'views' }
+HuffmanCoding >> gtCodingFor: aView [
+	<gtView>
+	^ aView columnedList
+		title: 'Coding';
+		items: [ (self linearizedFrequencies collect: [ :each | each -> each code ]) ];
+		column: 'Character' text: [ :each | each key gtDisplayString ];
+		column: 'Code' text: [ :each | each value gtDisplayString ];
+		send: [ :each | each key ]
+]
+
+{ #category : 'views' }
 HuffmanCoding >> gtCodingTreeFor: aView [
 	<gtView>
 	^ aView mondrian
