@@ -2,16 +2,42 @@ Class {
 	#name : 'HuffmanCoding',
 	#superclass : 'Object',
 	#instVars : [
-		'frequencies'
+		'frequencies',
+		'merges',
+		'serializedSteps'
 	],
 	#category : 'HuffmanCoding',
 	#package : 'HuffmanCoding'
 }
 
+{ #category : 'as yet unclassified' }
+HuffmanCoding class >> runFor: anArrayOfAssociations [
+	| characterFrequencies coding |
+	characterFrequencies := anArrayOfAssociations
+			collect: [ :each | 
+				HuffmanCharacterFrequency new
+					character: each key;
+					frequency: each value ].
+	coding := HuffmanCoding new characterFrequencies: characterFrequencies.
+	coding run.
+	^ coding
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding class >> stonAllInstVarNames [
+    ^ self allInstVarNames reject: [ :each | each = #serializedSteps ]
+]
+
 { #category : 'accessing' }
 HuffmanCoding >> characterFrequencies: aCollection [
 	frequencies := aCollection
 			asSortedCollection: [ :a :b | a frequency > b frequency ]
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> find: aCharacter [
+		self assert: frequencies size = 1 description: 'Finding only makes sense for coded trees. Try using `run` before.'.
+	^ self rootFrequency find: aCharacter
 ]
 
 { #category : 'as yet unclassified' }
@@ -28,8 +54,11 @@ HuffmanCoding >> gtCharacterFrequenciesFor: aView [
 		priority: 1;
 		items: [ frequencies ];
 		children: #children;
-		column: 'Value' text: [ :each | each gtDisplayString ];
-		column: 'Frequency' text: [ :each | each frequency ]
+		column: 'Frequency' text: [ :each | each frequency ];
+		column: 'Character'
+			text: [ :each | each isCharacterFrequency ifTrue: [ each character ] ifFalse: [ '' ] ];
+		column: 'Code' text: [ :each | each code ];
+		expandAll
 ]
 
 { #category : 'views' }
@@ -49,8 +78,39 @@ HuffmanCoding >> gtCodingTreeFor: aView [
 	^ aView mondrian
 		title: 'Coding tree';
 		priority: 10;
-		painting: [ :m | 
-			self paintCodingTreeWith: m ]
+		painting: [ :m | self paintCodingTreeHighlightingLastMerge: false with: m ]
+]
+
+{ #category : 'views' }
+HuffmanCoding >> gtStepsFor: aView [
+	<gtView>
+	serializedSteps ifNil: [ ^ aView empty ].
+	^ aView list
+		title: 'Steps';
+		items: [ self steps, {self} ];
+		itemStencil: [ BlElement new
+				layout: BlLinearLayout horizontal;
+				margin: (BlInsets all: 3);
+				constraintsDo: [ :c | 
+					c vertical fitContent.
+					c horizontal matchParent ];
+				addChild: BlElement new as: #graph ];
+		itemDataBinder: [ :anElement :aStep :anIndex | 
+			| m |
+			m := GtMondrian new.
+			aStep paintCodingTreeHighlightingLastMerge: true with: m.
+			anElement
+				replaceChild: (anElement childNamed: #graph)
+				with: m asElement
+				as: #graph.
+			anElement ]
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> initialize [
+	super initialize.
+	serializedSteps := OrderedCollection new.
+	merges := OrderedCollection new
 ]
 
 { #category : 'as yet unclassified' }
@@ -63,20 +123,24 @@ HuffmanCoding >> linearizedFrequencies [
 ]
 
 { #category : 'accessing' }
-HuffmanCoding >> paintCodingTreeWith: m [
+HuffmanCoding >> paintCodingTreeHighlightingLastMerge: aBoolean with: m [
 	m nodes
 		stencil: [ :each | 
-			| container |
+			| container label |
 			container := BrVerticalPane new fitContent alignCenter.
-			container
-				addChild: (BrLabel new
-						geometry: (BlRoundedRectangleGeometry cornerRadius: 5 );
-						border: Color veryVeryLightGray;
-						padding: (BlInsets all: 2);
-						aptitude: (BrGlamorousLabelAptitude new
-								foreground: Color black;
-								glamorousRegularSmallSize);
-						text: (each frequency round: 2)).
+			label := BrLabel new
+					geometry: (BlRoundedRectangleGeometry cornerRadius: 5);
+					border: Color veryVeryLightGray;
+					padding: (BlInsets all: 2);
+					aptitude: (BrGlamorousLabelAptitude new
+							foreground: Color black;
+							glamorousRegularSmallSize);
+					text: (each frequency round: 2).
+			(aBoolean and: [ merges notEmpty and: [ each = merges last ] ])
+				ifTrue: [ label background: Color paleRed ].
+			(aBoolean and: [ merges notEmpty and: [ merges last children includes: each ] ])
+				ifTrue: [ label background: Color lightRed ].
+			container addChild: label.
 			each isCharacterFrequency
 				ifTrue: [ container
 						addChild: (BrLabel new
@@ -108,6 +172,13 @@ HuffmanCoding >> paintCodingTreeWith: m [
 ]
 
 { #category : 'as yet unclassified' }
+HuffmanCoding >> postCopy [
+	frequencies := frequencies copy.
+	serializedSteps := serializedSteps copy.
+	merges := merges copy
+]
+
+{ #category : 'as yet unclassified' }
 HuffmanCoding >> rootFrequency [
 	self assert: frequencies size = 1 description: 'The root only makes sense for coded trees in which frequencies have a single . Try using `run` before.'.
 	^ self frequencies anyOne
@@ -116,11 +187,21 @@ HuffmanCoding >> rootFrequency [
 { #category : 'accessing' }
 HuffmanCoding >> run [
 	[ frequencies size > 1 ]
-		whileTrue: [ | lastTwo |
+		whileTrue: [ | lastTwo merge |
+			serializedSteps add: (STON toString: self).
 			lastTwo := frequencies last: 2.
 			frequencies removeAll: lastTwo.
-			frequencies
-				add: (HuffmanMergedFrequency
-						left: lastTwo last
-						right: lastTwo first) ]
+			merge := HuffmanMergedFrequency left: lastTwo first right: lastTwo last.
+			merges add: merge.
+			frequencies add: merge ]
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> serializedSteps [
+	^ serializedSteps
+]
+
+{ #category : 'as yet unclassified' }
+HuffmanCoding >> steps [
+	^ serializedSteps collect: [:each | STON fromString: each ]
 ]
