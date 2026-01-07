@@ -31,7 +31,9 @@ HuffmanCoding class >> stonAllInstVarNames [
 { #category : 'accessing' }
 HuffmanCoding >> characterFrequencies: aCollection [
 	frequencies := aCollection
-			asSortedCollection: [ :a :b | a frequency > b frequency ]
+			asSortedCollection: [ :a :b | 
+				a frequency > b frequency
+					or: [ (a frequency = b frequency) and: [ a isCharacterFrequency and: [ b isCharacterFrequency and: [ (a character) < (b character) ] ] ] ] ]
 ]
 
 { #category : 'as yet unclassified' }
